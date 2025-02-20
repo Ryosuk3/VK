@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.vk.R
 import com.example.vk.di.appModules
 import com.example.vk.ui.theme.VKTheme
 import org.koin.core.context.startKoin
@@ -22,6 +23,8 @@ class MainActivity : ComponentActivity() {
         startKoin{
             modules(appModules)
         }
+        //val apiKey = BuildConfig.YOUTUBE_API_KEY
+        val apiKey = getString(R.string.youtube_api_key)
         setContent {
             VKTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
