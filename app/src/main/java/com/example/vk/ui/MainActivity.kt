@@ -11,12 +11,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.vk.di.appModules
 import com.example.vk.ui.theme.VKTheme
+import org.koin.core.context.startKoin
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        startKoin{
+            modules(appModules)
+        }
         setContent {
             VKTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
