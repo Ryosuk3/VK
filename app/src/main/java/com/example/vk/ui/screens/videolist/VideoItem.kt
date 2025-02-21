@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.vk.data.model.Video
+import com.example.vk.ui.theme.LightWhite
 
 
 @Composable
@@ -37,9 +38,9 @@ fun VideoItem(video: Video, onClick: (Video) -> Unit){
             AsyncImage(
                 model = video.thumbnailUrl,
                 contentDescription = "Thumbnail",
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(120.dp)
+                    .size(150.dp)
             )
 
             Spacer(modifier=Modifier.width(8.dp))
@@ -48,8 +49,8 @@ fun VideoItem(video: Video, onClick: (Video) -> Unit){
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
             ){
-                Text(text=video.title, color = Color.Black)
-                Text(text = "Длительность: ${video.duration}", color = Color.DarkGray)
+                Text(text=video.title, color = Color.White)
+                Text(text = "Длительность: ${video.duration[2]}:${video.duration[]}", color = LightWhite)
             }
         }
     }

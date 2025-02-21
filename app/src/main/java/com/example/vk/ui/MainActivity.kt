@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.vk.R
 import com.example.vk.di.appModules
+import com.example.vk.navigation.AppNavigation
 import com.example.vk.ui.theme.VKTheme
 import org.koin.core.context.startKoin
 
@@ -20,36 +21,20 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        startKoin{
+        startKoin {
             modules(appModules)
         }
-        //val apiKey = BuildConfig.YOUTUBE_API_KEY
+
         val apiKey = getString(R.string.youtube_api_key)
+
         setContent {
             VKTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Scaffold(
+                    modifier = Modifier.fillMaxSize()
+                ) { innerPadding ->
+                    AppNavigation(apiKey = apiKey, innerPadding = innerPadding) // Запускаем навигацию
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    VKTheme {
-        Greeting("Android")
     }
 }

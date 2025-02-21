@@ -26,6 +26,7 @@ media3UiCompose = "1.6.0-alpha03"
 roomCommon = "2.6.0"
 roomKtx = "2.6.0"
 roomTesting = "2.6.0"
+navigationCompose = "2.8.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.13.1" }
@@ -60,6 +61,7 @@ androidx-media3-ui-compose = { group = "androidx.media3", name = "media3-ui-comp
 androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "roomTesting" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

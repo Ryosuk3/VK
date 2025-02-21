@@ -9,12 +9,25 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class VideoListViewModel(private val repository: VideoRepository): ViewModel(){
-    private val _videos=MutableStateFlow<List<Video>>(emptyList())
-    val videos: StateFlow<List<Video>> get() = _videos
+//    private val _videos=MutableStateFlow<List<Video>>(emptyList())
+//    val videos: StateFlow<List<Video>> get() = _videos
+    private val _state = MutableStateFlow<VideoListState>(VideoListState.Loading)
+    val state: StateFlow<VideoListState> get() = _state
 
     fun fetchVideos(apiKey: String){
         viewModelScope.launch {
-            _videos.value=repository.getVideos(apiKey)
+            //_videos.value=repository.getVideos(apiKey)
+            try{
+                val videos = repository.getVideos(apiKey)
+                if (videos.isNotEmpty()){
+                    _state.value=VideoListState.Success(videos)
+                }
+                else{
+                    _state.value=VideoListState.Error("Нет видео для отображения")
+                }
+            } catch (e: Exception){
+                _state.value=VideoListState.Error("Ошибка загрузки данных: ${e}")
+            }
         }
     }
 }
