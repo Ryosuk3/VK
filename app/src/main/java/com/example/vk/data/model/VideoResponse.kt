@@ -16,11 +16,14 @@ data class Snippet(
 )
 
 data class Thumbnails(
+    val maxres: Thumbnail?,
     val high: Thumbnail
 )
 
 data class Thumbnail(
-    val url: String
+    val url: String,
+    val width: Int?,
+    val height: Int?
 )
 
 data class ContentDetails(
