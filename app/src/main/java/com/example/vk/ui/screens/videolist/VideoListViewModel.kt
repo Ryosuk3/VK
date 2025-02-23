@@ -9,16 +9,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class VideoListViewModel(private val repository: VideoRepository): ViewModel(){
-//    private val _videos=MutableStateFlow<List<Video>>(emptyList())
-//    val videos: StateFlow<List<Video>> get() = _videos
+
     private val _state = MutableStateFlow<VideoListState>(VideoListState.Loading)
     val state: StateFlow<VideoListState> get() = _state
 
-    fun fetchVideos(apiKey: String, onRefreshComplete: (() -> Unit)? = null){
+    fun fetchVideos(apiKey: String, isNetworkAvailable: Boolean, onRefreshComplete: (() -> Unit)? = null){
         viewModelScope.launch {
-            //_videos.value=repository.getVideos(apiKey)
             try{
-                val videos = repository.getVideos(apiKey)
+                val videos = repository.getVideos(apiKey, isNetworkAvailable)
                 if (videos.isNotEmpty()){
                     _state.value=VideoListState.Success(videos)
                 }

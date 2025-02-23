@@ -1,5 +1,6 @@
 package com.example.vk.ui.screens.videolist
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.vk.data.model.Video
+import com.example.vk.utils.NetworkUtils
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import org.koin.androidx.compose.koinViewModel
@@ -32,20 +34,21 @@ fun VideoListScreen(
     apiKey: String,
     onVideoClick: (String) -> Unit,
     viewModel: VideoListViewModel = koinViewModel(),
-    innerPadding: PaddingValues
+    innerPadding: PaddingValues,
+    context: Context
 ){
     val state by viewModel.state.collectAsState()
     var isRefreshing by remember { mutableStateOf(false) }
 
     fun refreshVideos() {
         isRefreshing = true
-        viewModel.fetchVideos(apiKey) {
+        viewModel.fetchVideos(apiKey, isNetworkAvailable = NetworkUtils.isNetworkAvailable(context)) {
             isRefreshing = false // Останавливаем анимацию
         }
     }
 
     LaunchedEffect(Unit) {
-        viewModel.fetchVideos(apiKey)
+        viewModel.fetchVideos(apiKey, isNetworkAvailable = NetworkUtils.isNetworkAvailable(context))
     }
 
     SwipeRefresh(
