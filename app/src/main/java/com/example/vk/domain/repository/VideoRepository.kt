@@ -11,7 +11,7 @@ class VideoRepository(private val apiService: YoutubeApiService){
                 Video(
                     id = it.id,
                     title = it.snippet.title,
-                    thumbnailUrl = it.snippet.thumbnails.medium.url,
+                    thumbnailUrl = it.snippet.thumbnails.high.url,
                     duration = it.contentDetails.duration
                 )
             }

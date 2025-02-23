@@ -9,7 +9,7 @@ interface YoutubeApiService{
     suspend fun getPopularVideos(
         @Query("part") part: String = "snippet,contentDetails",
         @Query("chart") chart: String = "mostPopular",
-        @Query("maxResults") maxResults: Int = 5,
+        @Query("maxResults") maxResults: Int = 10,
         @Query("regionCode") region: String = "RU",
         @Query("key") apiKey: String
     ): VideoResponse

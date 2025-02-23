@@ -95,4 +95,6 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.5.1")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
     implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation("com.google.android.material:material:1.11.0-alpha01")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.30.1")
 }

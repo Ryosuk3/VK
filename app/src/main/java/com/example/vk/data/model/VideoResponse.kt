@@ -16,7 +16,7 @@ data class Snippet(
 )
 
 data class Thumbnails(
-    val medium: Thumbnail
+    val high: Thumbnail
 )
 
 data class Thumbnail(

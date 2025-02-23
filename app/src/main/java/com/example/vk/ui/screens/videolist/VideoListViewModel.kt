@@ -14,7 +14,7 @@ class VideoListViewModel(private val repository: VideoRepository): ViewModel(){
     private val _state = MutableStateFlow<VideoListState>(VideoListState.Loading)
     val state: StateFlow<VideoListState> get() = _state
 
-    fun fetchVideos(apiKey: String){
+    fun fetchVideos(apiKey: String, onRefreshComplete: (() -> Unit)? = null){
         viewModelScope.launch {
             //_videos.value=repository.getVideos(apiKey)
             try{
@@ -27,6 +27,8 @@ class VideoListViewModel(private val repository: VideoRepository): ViewModel(){
                 }
             } catch (e: Exception){
                 _state.value=VideoListState.Error("Ошибка загрузки данных: ${e}")
+            } finally {
+                onRefreshComplete?.invoke()
             }
         }
     }
