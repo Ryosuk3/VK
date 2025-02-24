@@ -12,4 +12,7 @@ interface VideoDao{
 
     @Query("DELETE FROM videos")
     suspend fun clearVideos()
+
+    @Query("SELECT imageData FROM videos WHERE id = :videoId")
+    suspend fun getImageData(videoId: String): ByteArray?
 }

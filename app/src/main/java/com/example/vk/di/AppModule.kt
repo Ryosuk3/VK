@@ -21,7 +21,7 @@ val databaseModule = module {
 }
 
 val repositoryModule = module {
-    single { VideoRepository(get(), get()) }
+    single { VideoRepository(get(), get(), get()) }
 }
 
 val viewModelModule = module {

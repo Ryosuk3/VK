@@ -1,7 +1,10 @@
 package com.example.vk.ui.screens.videoplayer
 
+import android.os.Handler
+import android.os.Looper
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.activity.compose.BackHandler
 import androidx.annotation.OptIn
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,27 +18,15 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.hls.HlsMediaSource
 
 @OptIn(UnstableApi::class)
 @Composable
-fun VideoPlayerScreen(videoUrl: String) {
+fun VideoPlayerScreen(videoUrl: String, onBack: () -> Unit) {
     val context = LocalContext.current
-
-    if (videoUrl.isBlank()) {
-        println("Ошибка: URL видео пуст!")
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(text = "Ошибка загрузки видео", color = Color.Red)
-        }
-        return
-    } else {
-        println("Загружаем видео: $videoUrl")
-    }
 
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
@@ -45,6 +36,14 @@ fun VideoPlayerScreen(videoUrl: String) {
             setMediaSource(mediaSource)
             prepare()
             playWhenReady = true
+        }
+    }
+    val handler = Handler(Looper.getMainLooper())
+    BackHandler {
+        handler.post {
+            exoPlayer.stop()
+            exoPlayer.release()
+            onBack()
         }
     }
 
@@ -63,6 +62,7 @@ fun VideoPlayerScreen(videoUrl: String) {
 
     DisposableEffect(Unit) {
         onDispose {
+            exoPlayer.stop()
             exoPlayer.release()
         }
     }

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     id("com.google.devtools.ksp") version "2.1.0-1.0.29"
+    id("kotlin-kapt")
 }
 
 android {
@@ -76,6 +77,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit2.converter.gson)
     implementation(libs.koin.test)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+    implementation("com.github.bumptech.glide:okhttp3-integration:4.16.0")
     //implementation("io.insert-koin:koin-android:3.5.0")
     implementation("io.insert-koin:koin-androidx-compose:3.5.0")
     implementation(libs.androidx.swiperefreshlayout)
@@ -84,6 +88,11 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-hls:1.2.0")
     implementation(libs.androidx.media3.ui)
     implementation("androidx.room:room-runtime:2.6.1")
+    implementation(libs.picasso)
+    implementation(libs.androidx.junit.ktx)
+    implementation(libs.androidx.ui.test.junit4.android)
+    implementation(libs.androidx.espresso.core)
+    implementation(libs.ui.test.junit4)
     ksp("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
 
@@ -93,9 +102,10 @@ dependencies {
     //kapt("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.0") // Для работы KAPT
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
+
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

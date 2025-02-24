@@ -29,7 +29,9 @@ fun AppNavigation(apiKey: String, innerPadding: PaddingValues) {
         }
         composable("video_player/{videoUrl}") { backStackEntry ->
             val videoUrl = backStackEntry.arguments?.getString("videoUrl")?.let { Uri.decode(it) } ?: ""
-            VideoPlayerScreen(videoUrl)
+            VideoPlayerScreen(videoUrl) {
+                navController.popBackStack()
+            }
         }
     }
 }
