@@ -32,46 +32,44 @@ import com.example.vk.utils.formatDuration
 
 
 @Composable
-fun VideoItem(video: Video, onClick: (Video) -> Unit){
+fun VideoItem(video: Video, onClick: (Video) -> Unit) {
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable { onClick(video) }
-    ){
-        Column(){
-            Box(){
+    ) {
+        Column {
+            Box {
                 AsyncImage(
                     model = video.thumbnailUrl,
                     contentDescription = "Thumbnail",
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier
                         .height(250.dp)
+                        .fillMaxWidth()
                 )
-
 
                 Text(
                     text = formatDuration(video.duration),
-                    color = onPrimaryLight,
+                    color = Color.White,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
+                        .padding(4.dp)
                 )
             }
+
             Spacer(modifier = Modifier.height(3.dp))
 
             Text(
-                text=video.title,
+                text = video.title,
                 modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                    .align(Alignment.CenterHorizontally),
+                    .fillMaxWidth()
+                    .padding(8.dp),
                 maxLines = 2,
-                minLines = 2,
-                softWrap = true,
-                overflow =  TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis
             )
-
         }
     }
 }
-

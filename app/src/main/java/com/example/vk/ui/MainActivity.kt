@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
             modules(appModules)
         }
 
-        val apiKey = getString(R.string.youtube_api_key)
+        val apiKey = getString(R.string.api_key)
 
         setContent {
             AppTheme {

@@ -1,6 +1,7 @@
 package com.example.vk.ui.screens.videolist
 
 import android.content.Context
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.example.vk.data.model.Video
 import com.example.vk.utils.NetworkUtils
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -36,14 +38,14 @@ fun VideoListScreen(
     viewModel: VideoListViewModel = koinViewModel(),
     innerPadding: PaddingValues,
     context: Context
-){
+) {
     val state by viewModel.state.collectAsState()
     var isRefreshing by remember { mutableStateOf(false) }
 
     fun refreshVideos() {
         isRefreshing = true
         viewModel.fetchVideos(apiKey, isNetworkAvailable = NetworkUtils.isNetworkAvailable(context)) {
-            isRefreshing = false // Останавливаем анимацию
+            isRefreshing = false
         }
     }
 
@@ -57,32 +59,26 @@ fun VideoListScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(innerPadding)
-            .background(MaterialTheme.colorScheme.background)
-    ){
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)
-            .background(MaterialTheme.colorScheme.background)
-        ) {
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
             when (state) {
                 is VideoListState.Loading -> CircularProgressIndicator(
-                    modifier = Modifier
-                        .align(Alignment.Center),
-                    color = MaterialTheme.colorScheme.primary
+                    modifier = Modifier.align(Alignment.Center)
                 )
                 is VideoListState.Success -> {
                     val videos = (state as VideoListState.Success).videos
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
-                        items(videos.size) { index ->
-                            VideoItem(video = videos[index]) {
-                                onVideoClick(it.id)
+                        items(videos) { video ->
+                            VideoItem(video = video) {
+                                val encodedUrl = Uri.encode(video.videoUrl)
+                                onVideoClick(encodedUrl)
                             }
                         }
                     }
                 }
                 is VideoListState.Error -> Text(
                     text = (state as VideoListState.Error).message,
-                    color = MaterialTheme.colorScheme.error,
+                    color = Color.Red,
                     modifier = Modifier.align(Alignment.Center)
                 )
             }

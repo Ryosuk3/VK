@@ -81,6 +81,7 @@ dependencies {
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.exoplayer.dash)
+    implementation("androidx.media3:media3-exoplayer-hls:1.2.0")
     implementation(libs.androidx.media3.ui)
     implementation("androidx.room:room-runtime:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
@@ -103,4 +104,6 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.2.2")
     implementation("com.google.android.material:material:1.11.0-alpha01")
     implementation("com.google.accompanist:accompanist-swiperefresh:0.30.1")
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+
 }

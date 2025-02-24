@@ -1,34 +1,40 @@
 package com.example.vk.domain.repository
 
 import com.example.vk.data.local.VideoDao
-import com.example.vk.data.local.VideoEntity
 import com.example.vk.data.local.toDomain
+import com.example.vk.data.local.toEntity
 import com.example.vk.data.model.Video
-import com.example.vk.data.network.YoutubeApiService
+import com.example.vk.data.network.ApiVideoService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class VideoRepository(private val apiService: YoutubeApiService, private val videoDao: VideoDao) {
+class VideoRepository(private val apiService: ApiVideoService, private val videoDao: VideoDao) {
+
     suspend fun getVideos(apiKey: String, isNetworkAvailable: Boolean): List<Video> {
         val cachedVideos = videoDao.getAllVideos().map { it.toDomain() }
 
-        if (!isNetworkAvailable){
+        if (!isNetworkAvailable) {
             return cachedVideos
         }
 
         return try {
-            val response = apiService.getPopularVideos(apiKey = apiKey)
-            val videos = response.items.mapNotNull { item ->
-                val duration = parseDuration(item.contentDetails.duration)
+            val response = apiService.getVideos("Bearer $apiKey")
+            val videos = response.data.map { item ->
+                var duration = item.duration
 
-                if (duration > 180) {
-                    Video(
-                        id = item.id,
-                        title = item.snippet.title,
-                        thumbnailUrl = item.snippet.thumbnails.maxres?.url ?: item.snippet.thumbnails.high.url,
-                        duration = item.contentDetails.duration
-                    )
-                } else {
-                    null
+                if (duration == null || duration == 0.0) {
+                    duration = fetchVideoDuration(apiKey, item.videoId)
                 }
+
+                val videoUrl = item.assets.hls ?: item.assets.mp4
+
+                Video(
+                    id = item.videoId,
+                    title = item.title,
+                    thumbnailUrl = item.assets.thumbnail,
+                    duration = duration ?: 0.0,
+                    videoUrl = videoUrl
+                )
             }
 
             if (videos.isNotEmpty()) {
@@ -37,31 +43,22 @@ class VideoRepository(private val apiService: YoutubeApiService, private val vid
             }
 
             videos
-
-
-
         } catch (e: Exception) {
             cachedVideos
         }
     }
 
-
-
-    private fun parseDuration(duration: String): Int {
-        val regex = Regex("PT(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?")
-        val matchResult = regex.matchEntire(duration)
-        val hours = matchResult?.groups?.get(1)?.value?.toIntOrNull() ?: 0
-        val minutes = matchResult?.groups?.get(2)?.value?.toIntOrNull() ?: 0
-        val seconds = matchResult?.groups?.get(3)?.value?.toIntOrNull() ?: 0
-        return hours * 3600 + minutes * 60 + seconds
+    private suspend fun fetchVideoDuration(apiKey: String, videoId: String): Double? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val statusResponse = apiService.getVideoStatus("Bearer $apiKey", videoId)
+                statusResponse.encoding.metadata?.duration
+            } catch (e: Exception) {
+                null
+            }
+        }
     }
 }
 
-fun Video.toEntity(): VideoEntity {
-    return VideoEntity(
-        id = this.id,
-        title = this.title,
-        thumbnailUrl = this.thumbnailUrl,
-        duration = this.duration
-    )
-}
+
+

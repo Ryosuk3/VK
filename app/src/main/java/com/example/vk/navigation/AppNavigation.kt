@@ -1,5 +1,6 @@
 package com.example.vk.navigation
 
+import android.net.Uri
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -26,9 +27,9 @@ fun AppNavigation(apiKey: String, innerPadding: PaddingValues) {
                 context = context
             )
         }
-        composable("video_player/{videoId}") { backStackEntry ->
-            val videoId = backStackEntry.arguments?.getString("videoId") ?: ""
-            VideoPlayerScreen(videoId)
+        composable("video_player/{videoUrl}") { backStackEntry ->
+            val videoUrl = backStackEntry.arguments?.getString("videoUrl")?.let { Uri.decode(it) } ?: ""
+            VideoPlayerScreen(videoUrl)
         }
     }
 }

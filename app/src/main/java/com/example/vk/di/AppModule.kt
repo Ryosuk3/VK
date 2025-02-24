@@ -4,25 +4,15 @@ import android.content.Context
 import androidx.room.Room
 import com.example.vk.data.local.AppDatabase
 import com.example.vk.data.local.VideoDao
-import com.example.vk.data.network.YoutubeApiService
+import com.example.vk.data.network.ApiClient
 import com.example.vk.domain.repository.VideoRepository
 import com.example.vk.ui.screens.videolist.VideoListViewModel
-import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 val networkModule = module {
-    single {
-        Retrofit.Builder()
-            .baseUrl("https://www.googleapis.com/youtube/v3/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(OkHttpClient.Builder().build())
-            .build()
-            .create(YoutubeApiService::class.java)
-    }
+    single { ApiClient.apiService }
 }
 
 val databaseModule = module {
@@ -45,7 +35,7 @@ fun provideDatabase(context: Context): AppDatabase {
         context.applicationContext,
         AppDatabase::class.java,
         "video_database"
-    ).fallbackToDestructiveMigration() // Позволяет перегенерировать базу при изменениях
+    ).fallbackToDestructiveMigration()
         .build()
 }
 
